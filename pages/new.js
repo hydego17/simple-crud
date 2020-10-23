@@ -75,7 +75,14 @@ const newProduct = () => {
   return (
     <div className="bg-gray-200 h-screen">
       <div className=" flex flex-col justify-center max-w-screen-md mx-auto py-8 antialiased px-10 ">
-        <h1 className="text-3xl font-medium my-8 ">Create Product</h1>
+        <div className="flex justify-between items-center my-8 ">
+          <h1 className="text-3xl font-medium">Create Product</h1>
+          <Link href="/">
+            <a className=" text-md text-gray-700 font-medium hover:text-gray-900 ">
+              Back
+            </a>
+          </Link>
+        </div>
         {isSubmitting ? (
           <Loader active inline="centered" />
         ) : (

@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import { Confirm, Button, Loader, Card, Image } from "semantic-ui-react"
 import absoluteUrl from "next-absolute-url"
 import { route } from "next/dist/next-server/server/router"
+import Link from "next/link"
 
 const Product = ({ product }) => {
   const [confirm, setConfirm] = useState(false)
@@ -42,7 +43,15 @@ const Product = ({ product }) => {
         <Loader active />
       ) : (
         <div className="bg-gray-200 h-screen">
-          <h1 className="text-3xl font-medium my-8 ">View Product</h1>
+          <div className="flex justify-between items-center ">
+            <h1 className="text-3xl font-medium ">View Product</h1>
+            <Link href="/">
+              <a className=" text-md text-gray-700 font-medium hover:text-gray-900 ">
+                Back
+              </a>
+            </Link>
+          </div>
+
           <Card>
             <Image
               src="https://react.semantic-ui.com/images/wireframe/white-image.png"
