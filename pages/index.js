@@ -8,7 +8,7 @@ const Home = ({ products }) => {
   return (
     <div className="min-h-screen antialiased bg-gray-200 flex  flex-col items-center ">
       <Head>
-        <title>Create Next App</title>
+        <title>CRUD-Arkademy</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
