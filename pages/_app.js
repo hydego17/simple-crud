@@ -1,5 +1,6 @@
-import "../styles/index.css"
 import "../styles/globals.css"
+import "semantic-ui-css/semantic.min.css"
+import "../styles/index.css"
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />

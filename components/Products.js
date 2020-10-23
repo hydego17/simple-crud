@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export default function Products({ products }) {
+const Products = ({ products }) => {
   return (
     <div className=" overflow-x-auto shadow rounded-lg product my-6 border lg:p-4 bg-white ">
       <table className="table-auto w-full ">
@@ -50,3 +50,5 @@ export default function Products({ products }) {
     </div>
   )
 }
+
+export default Products
