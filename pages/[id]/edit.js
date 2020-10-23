@@ -3,13 +3,14 @@ import Link from "next/link"
 import fetch from "isomorphic-unfetch"
 import { useRouter } from "next/router"
 import { Button, Form, Loader } from "semantic-ui-react"
+import absoluteUrl from "next-absolute-url"
 
-const newProduct = () => {
+const EditProduct = ({ product }) => {
   const [form, setForm] = useState({
-    nama_produk: "",
-    keterangan: "",
-    harga: 0,
-    jumlah: 0,
+    nama_produk: product.nama_produk,
+    keterangan: product.keterangan,
+    harga: product.harga,
+    jumlah: product.jumlah,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
@@ -18,17 +19,17 @@ const newProduct = () => {
   useEffect(() => {
     if (isSubmitting) {
       if (Object.keys(errors).length === 0) {
-        createProduct()
+        updateNote()
       } else {
         setIsSubmitting(false)
       }
     }
   }, [errors])
 
-  const createProduct = async () => {
+  const updateNote = async () => {
     try {
-      const res = await fetch("/api/product", {
-        method: "POST",
+      const res = await fetch(`/api/product/${router.query.id}`, {
+        method: "PUT",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ const newProduct = () => {
   return (
     <div className="bg-gray-200 h-screen">
       <div className=" flex flex-col justify-center max-w-screen-md mx-auto py-8 antialiased px-10 ">
-        <h1 className="text-3xl font-medium my-8 ">Create Product</h1>
+        <h1 className="text-3xl font-medium my-8 ">Edit Product</h1>
         {isSubmitting ? (
           <Loader active inline="centered" />
         ) : (
@@ -92,6 +93,7 @@ const newProduct = () => {
               type="text"
               label="Nama Produk"
               name="nama_produk"
+              value={form.nama_produk}
               placeholder="Nama Produk"
               onChange={handleChange}
             />
@@ -104,6 +106,7 @@ const newProduct = () => {
               type="text"
               label="keterangan"
               name="keterangan"
+              value={form.keterangan}
               placeholder="Keterangan"
               onChange={handleChange}
             />
@@ -116,6 +119,7 @@ const newProduct = () => {
               type="number"
               label="Harga"
               name="harga"
+              value={form.harga}
               placeholder="Harga"
               onChange={handleChange}
             />
@@ -128,10 +132,11 @@ const newProduct = () => {
               type="number"
               label="Jumlah"
               name="jumlah"
+              value={form.jumlah}
               placeholder="Jumlah"
               onChange={handleChange}
             />
-            <Button type="submit">Tambahkan Produk</Button>
+            <Button type="submit">Ubah Produk</Button>
           </Form>
         )}
       </div>
@@ -139,4 +144,13 @@ const newProduct = () => {
   )
 }
 
-export default newProduct
+EditProduct.getInitialProps = async ({ req, query: { id } }) => {
+  const { origin } = absoluteUrl(req, "localhost:3000")
+
+  const resp = await fetch(`${origin}/api/product/${id}`)
+  const { data } = await resp.json()
+
+  return { product: data }
+}
+
+export default EditProduct

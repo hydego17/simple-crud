@@ -36,7 +36,16 @@ const Home = ({ products }) => {
       </main>
 
       <footer className=" max-w-screen-lg p-6 bg-gray-200 w-full flex justify-between items-center">
-        <p className="font-medium text text-gray-700">Made by Umma Ahimsha</p>
+        <p className="font-medium text text-gray-700">
+          Made by
+          <Link href="https://github.com/hydego17">
+            <a className="text-teal-700 " target="_blank">
+              {" "}
+              Umma Ahimsha
+            </a>
+          </Link>
+        </p>
+
         <Link href="/api/product">
           <a
             target="_blank"
