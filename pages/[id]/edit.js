@@ -2,18 +2,28 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import fetch from "isomorphic-unfetch"
 import { useRouter } from "next/router"
-import { Button, Form, Loader } from "semantic-ui-react"
+import { Button, Form, Loader, Confirm } from "semantic-ui-react"
 import absoluteUrl from "next-absolute-url"
 
 const EditProduct = ({ product }) => {
+  // State for initial product props
   const [form, setForm] = useState({
     nama_produk: product.nama_produk,
     keterangan: product.keterangan,
     harga: product.harga,
     jumlah: product.jumlah,
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
+
+  // State for delete handler
+  const [confirm, setConfirm] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const open = () => setConfirm(true)
+  const close = () => setConfirm(false)
+
   const router = useRouter()
 
   useEffect(() => {
@@ -24,7 +34,23 @@ const EditProduct = ({ product }) => {
         setIsSubmitting(false)
       }
     }
-  }, [errors])
+
+    if (isDeleting) {
+      deleteProduct()
+    }
+  }, [errors, isDeleting])
+
+  const deleteProduct = async () => {
+    const productId = router.query.id
+    try {
+      const deleted = await fetch(`/api/product/${productId}`, {
+        method: "DELETE",
+      })
+      router.push("/")
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
 
   const updateNote = async () => {
     try {
@@ -54,6 +80,11 @@ const EditProduct = ({ product }) => {
       ...form,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    close()
   }
 
   const validate = () => {
@@ -87,66 +118,83 @@ const EditProduct = ({ product }) => {
         {isSubmitting ? (
           <Loader active inline="centered" />
         ) : (
-          <Form onSubmit={handleSubmit}>
-            <Form.Input
-              error={
-                errors.nama_produk
-                  ? {
-                      content: "Harap masukan Nama produk",
-                      pointing: "below",
-                    }
-                  : null
-              }
-              type="text"
-              label="Nama Produk"
-              name="nama_produk"
-              value={form.nama_produk}
-              placeholder="Nama Produk"
-              onChange={handleChange}
-            />
-            <Form.Input
-              error={
-                errors.keterangan
-                  ? { content: "Harap masukan Keterangan", pointing: "below" }
-                  : null
-              }
-              type="text"
-              label="keterangan"
-              name="keterangan"
-              value={form.keterangan}
-              placeholder="Keterangan"
-              onChange={handleChange}
-            />
-            <Form.Input
-              error={
-                errors.nama_produk
-                  ? { content: "Harap masukan harga", pointing: "below" }
-                  : null
-              }
-              type="number"
-              label="Harga"
-              name="harga"
-              value={form.harga}
-              placeholder="Harga"
-              onChange={handleChange}
-            />
-            <Form.Input
-              error={
-                errors.nama_produk
-                  ? { content: "Harap masukan jumlah", pointing: "below" }
-                  : null
-              }
-              type="number"
-              label="Jumlah"
-              name="jumlah"
-              value={form.jumlah}
-              placeholder="Jumlah"
-              onChange={handleChange}
-            />
-            <Button type="submit">Ubah Produk</Button>
-          </Form>
+          <>
+            <Form onSubmit={handleSubmit}>
+              <Form.Input
+                error={
+                  errors.nama_produk
+                    ? {
+                        content: "Harap masukan Nama produk",
+                        pointing: "below",
+                      }
+                    : null
+                }
+                type="text"
+                label="Nama Produk"
+                name="nama_produk"
+                value={form.nama_produk}
+                placeholder="Nama Produk"
+                onChange={handleChange}
+              />
+              <Form.Input
+                error={
+                  errors.keterangan
+                    ? { content: "Harap masukan Keterangan", pointing: "below" }
+                    : null
+                }
+                type="text"
+                label="keterangan"
+                name="keterangan"
+                value={form.keterangan}
+                placeholder="Keterangan"
+                onChange={handleChange}
+              />
+              <Form.Input
+                error={
+                  errors.nama_produk
+                    ? { content: "Harap masukan harga", pointing: "below" }
+                    : null
+                }
+                type="number"
+                label="Harga"
+                name="harga"
+                value={form.harga}
+                placeholder="Harga"
+                onChange={handleChange}
+              />
+              <Form.Input
+                error={
+                  errors.nama_produk
+                    ? { content: "Harap masukan jumlah", pointing: "below" }
+                    : null
+                }
+                type="number"
+                label="Jumlah"
+                name="jumlah"
+                value={form.jumlah}
+                placeholder="Jumlah"
+                onChange={handleChange}
+              />
+              <div className="py-4">
+                <Button type="submit">Ubah Produk</Button>
+              </div>
+            </Form>
+
+            <div className="delete-button ml-auto text-right">
+              <Button inverted color="red" onClick={open}>
+                Delete Produk
+              </Button>
+            </div>
+          </>
         )}
       </div>
+      <Confirm
+        open={confirm}
+        onCancel={close}
+        cancelButton="Not really"
+        confirmButton="Yeep"
+        onConfirm={handleDelete}
+      />
     </div>
   )
 }
