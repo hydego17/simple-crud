@@ -180,7 +180,7 @@ const EditProduct = ({ product }) => {
               </div>
             </Form>
 
-            <div className="delete-button text-right">
+            <div className="delete-button ml-auto">
               <Button inverted color="red" onClick={open}>
                 Delete
               </Button>
