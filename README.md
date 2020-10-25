@@ -1,6 +1,6 @@
 ## Simple CRUD App using Next.Js & MongoDB.
 
-### Demo: https://crud-arkademy.vercel.app/
+### Demo: [See Demo](https://crud-arkademy.vercel.app/)
 
 This project was meant to be submitted for Arkademy Bootcamp test.
 
